@@ -5,6 +5,8 @@ const cache = require('memory-cache');
 const passport = require('passport');
 const { check, validationResult } = require('express-validator');
 
+const port = 4000;
+
 const getErrorAsObject = errors =>
   errors.reduce((errorObject, { param, msg }) => {
     errorObject[param] = msg;
@@ -17,6 +19,7 @@ global.cache = cache;
 seedUsers();
 
 const app = express()
+  .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   .use(
     session({
@@ -76,12 +79,15 @@ app
     }
   );
 
-app.listen(
-  4000,
-  () => {
-    console.log('Error running express server.');
-  },
-  () => {
-    console.log('Express server listening on port 4000.');
-  }
-);
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(
+    port,
+    () => {
+      console.log('Error running express server.');
+    },
+    () => {
+      console.log('Express server listening on port 4000.');
+    });
+}
+
+module.exports = app

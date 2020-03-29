@@ -90,6 +90,8 @@ class App extends Component {
   };
 
   postMessage = async ({ value }) => {
+    console.log('test data: ', value);
+
     const response = await fetch('/messages', {
       method: 'POST',
       headers: {
