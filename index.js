@@ -19,7 +19,7 @@ global.cache = cache;
 seedUsers();
 
 const app = express()
-  .use(bodyParser.json())
+  //.use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   .use(
     session({

@@ -3,10 +3,7 @@ const request = require('supertest');
 const app = require('./index');
 const agent = request.agent(app);
 
-const mockUser = {
-  username: 'randombrandon',
-  password: 'randompassword'
-}
+const mockUser = 'username=randombrandon&password=randompassword';
 
 const mockError = {
   errors: {
@@ -14,22 +11,16 @@ const mockError = {
   }
 }
 
-const mockCorrectData = {
-  'content': 'I should work',
-  'personalWebsiteURL': 'https://placedog.net/500'
-}
+const mockCorrectData = 'content=I should work&personalWebsiteURL=https://placedog.net/500';
 
-const mockWrongData = {
-  content: 'I will not get Hacked Today',
-  personalWebsiteURL: 'javascript:alert("Hacked!");'
-}
+const mockWrongData = 'content=I will not get Hacked Today&personalWebsiteURL=javascript:alert("Hacked!");';
 
 describe('app', () => {
   describe('when authenticated', () => {
     beforeEach(async () => {
       await agent
         .post('/login')
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/x-www-form-urlencoded')
         .send(mockUser)
     });
 
@@ -40,7 +31,7 @@ describe('app', () => {
             await agent
               .post('/messages')
               .send(mockWrongData)
-              .set('Accept', 'application/json')
+              .set('Accept', 'application/x-www-form-urlencoded')
               .expect('Content-Type', /json/)
               .expect(400)
               .expect(mockError)
@@ -53,7 +44,7 @@ describe('app', () => {
             await agent
               .post('/messages')
               .send(mockCorrectData)
-              .set('Accept', 'application/json')
+              .set('Accept', 'application/x-www-form-urlencoded')
               .expect('Content-Type', /json/)
               .expect(201)
             done();
